@@ -23,6 +23,7 @@
         readonly Message _message;
         readonly ReceiveSettings _settings;
         bool _locked;
+        private StringMessageBody _body;
 
         public AmazonSqsReceiveContext(Message message, bool redelivered, SqsReceiveEndpointContext context, ClientContext clientContext,
             ReceiveSettings settings, ConnectionContext connectionContext)
@@ -33,7 +34,8 @@
             _message = message;
             _settings = settings;
 
-            Body = new StringMessageBody(message?.Body);
+            TransportMessage = transportMessage;
+            _body = new StringMessageBody(transportMessage?.Body);
 
             _activeTokenSource = new CancellationTokenSource();
             _locked = true;
@@ -43,7 +45,9 @@
 
         protected override IHeaderProvider HeaderProvider => new AmazonSqsHeaderProvider(TransportMessage);
 
-        public override MessageBody Body { get; }
+        public override MessageBody Body => _body;
+
+        public void OverwriteMessageBody(string message) => _body = new StringMessageBody(message);
 
         public Message TransportMessage => _message;
 
