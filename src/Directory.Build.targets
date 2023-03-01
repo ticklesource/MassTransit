@@ -1,5 +1,0 @@
-<Project>
-  <Target Name="NugetPackRelease" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
-    <Exec Command="dotnet pack -p:TargetFrameworks=netstandard2.1 -p:PackageVersion=$(Version).$(BUILD_NUMBER)$(PreleaseTag) --no-build --configuration $(Configuration) --output &quot;$(NugetDir)&quot;" />
-  </Target>
-</Project>

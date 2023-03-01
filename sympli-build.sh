@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-PROJECTS="./src/MassTransit.Abstractions,./src/MassTransit,./src/Transports/MassTransit.AmazonSqsTransport"
+PROJECTS="./src/MassTransit.Abstractions"
 
 project_list=$(echo $PROJECTS | tr "," "\n")
 
@@ -10,6 +10,7 @@ for p in $project_list
 do
   dotnet restore --no-cache $p
   dotnet build $p --configuration Release
+  dotnet pack $p -p:TargetFrameworks=netstandard2.1 --no-build --configuration Release --output $p/nuget;
 
   # publish
   cd $p/nuget

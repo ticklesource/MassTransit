@@ -17,6 +17,7 @@
     <NugetDir>$(NugetRelease)</NugetDir>
     <PreleaseTag>-sympli</PreleaseTag>
     <SympliVersion>8.0.13</SympliVersion>
+    <Version>$(SympliVersion).$(BUILD_NUMBER)$(PreleaseTag)</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

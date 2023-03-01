@@ -4,7 +4,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>$(SympliVersion)</Version>
+    <Version>$(Version)</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(IsWindows)' == 'true' ">
@@ -51,7 +51,7 @@
   <Choose>
     <When Condition=" '$(Configuration)'=='Release' ">
       <ItemGroup>
-        <PackageReference Include="MassTransit.Abstractions" VersionOverride="$(SympliVersion).$(BUILD_NUMBER)$(PreleaseTag)" />
+        <PackageReference Include="MassTransit.Abstractions" VersionOverride="$(Version).$(BUILD_NUMBER)$(PreleaseTag)" />
       </ItemGroup>
     </When>
     <Otherwise>
