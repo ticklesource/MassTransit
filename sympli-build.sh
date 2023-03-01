@@ -7,5 +7,14 @@ project_list=$(echo $PROJECTS | tr "," "\n")
 for p in $project_list
 do
   dotnet restore --no-cache $p
-  dotnet build -p:Publish=enable $p --configuration Release
+  dotnet build $p --configuration Release
+done
+
+# remember where we are
+root=$PWD
+for p in $project_list
+do
+  cd $p/nuget
+  dotnet nuget push "*.nupkg" --source $NUGET_REPO --api-key $NUGET_KEY
+  cd $root
 done
