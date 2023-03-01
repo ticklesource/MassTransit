@@ -1,0 +1,33 @@
+version: 0.2
+
+env:
+  parameter-store:
+    BUILD_NUMBER: "/DevOps/build-number/masstransit"
+    NUGET_REPO: "/DevOps/InternalNugetSource"
+    NUGET_KEY: "/DevOps/NugetAPIKey"
+
+proxy:
+  upload-artifacts: yes
+  logs: yes
+
+phases:
+  install:
+    runtime-versions:
+      dotnet: 6.0
+      python: 3.10
+
+  pre_build:
+    commands:
+      - cp -rf $CODEBUILD_SRC_DIR_DevOpsTool/* ./ 2> /dev/null
+      - chmod +x *.sh
+      - ./build.sh pre_build
+      - ./nuget.sh validate_nuget_reference
+      - ./build.sh sonar_scan_begin
+  build:
+    commands:
+      - ./sympli-build.sh
+      - ./build.sh sonar_scan_end
+
+artifacts:
+  files:
+    - "**/*"

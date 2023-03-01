@@ -14,10 +14,10 @@
   <PropertyGroup>
     <NugetRelease>$(SolutionDir)nuget</NugetRelease>
     <NugetLocal>$(USERPROFILE)\nuget_local</NugetLocal>
-    <NugetDir>$(NugetLocal)</NugetDir>
-    <BUILD_NUMBER>2</BUILD_NUMBER>
-    <PreleaseTag>-test</PreleaseTag>
+    <NugetDir>$(NugetRelease)</NugetDir>
+    <PreleaseTag>-sympli</PreleaseTag>
     <SympliVersion>8.0.13</SympliVersion>
+    <Publish>disable</Publish>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

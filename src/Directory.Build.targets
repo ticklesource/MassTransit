@@ -2,4 +2,7 @@
   <Target Name="NugetPackRelease" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
     <Exec Command="dotnet pack -p:PackageVersion=$(Version).$(BUILD_NUMBER)$(PreleaseTag) --no-build --configuration $(Configuration) --output &quot;$(NugetDir)&quot;" />
   </Target>
+  <Target Name="NugetPushRelease" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' AND '$(Publish)' == 'enable'" DependsOnTargets="NugetPackRelease">
+    <Exec Command="dotnet nuget push $(NugetDir)\$(PackageId).$(Version).$(BUILD_NUMBER)$(PreleaseTag).nupkg --source $(NUGET_REPO) --api-key '$(NUGET_KEY)'" />
+  </Target>
 </Project>
