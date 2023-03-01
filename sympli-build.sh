@@ -9,8 +9,8 @@ root=$PWD
 for p in $project_list
 do
   dotnet restore --no-cache $p
-  dotnet build $p -p:BUILD_NUMBER=$BUILD_NUMBER -p:TargetFrameworks=netstandard2.1 --configuration Release
-  dotnet pack $p -p:BUILD_NUMBER=$BUILD_NUMBER -p:TargetFrameworks=netstandard2.1 --no-build --configuration Release --output $p/nuget;
+  dotnet build $p -p:BUILD_NUMBER=$BUILD_NUMBER -p:TargetFrameworks=netstandard2.1 -f netstandard2.1 --configuration Release
+  dotnet pack $p -p:BUILD_NUMBER=$BUILD_NUMBER -p:TargetFrameworks=netstandard2.1 -f netstandard2.1 --no-build --configuration Release --output $p/nuget;
 
   # publish
   cd $p/nuget
