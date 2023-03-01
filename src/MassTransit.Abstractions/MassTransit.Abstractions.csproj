@@ -4,12 +4,12 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <VersionPrefix>0.18.0</VersionPrefix>
+    <Version>$(SympliVersion)</Version>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(IsWindows)' == 'true' ">
-    <TargetFrameworks>$(TargetFrameworks);net462</TargetFrameworks>
-  </PropertyGroup>
+<!--  <PropertyGroup Condition=" '$(IsWindows)' == 'true' ">-->
+<!--    <TargetFrameworks>$(TargetFrameworks);net462</TargetFrameworks>-->
+<!--  </PropertyGroup>-->
 
   <PropertyGroup>
     <RootNamespace>MassTransit</RootNamespace>

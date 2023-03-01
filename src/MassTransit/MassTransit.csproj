@@ -4,14 +4,14 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <VersionPrefix>0.18.0</VersionPrefix>
+    <Version>$(SympliVersion)</Version>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(IsWindows)' == 'true' ">
-    <TargetFrameworks>$(TargetFrameworks);net462</TargetFrameworks>
-  </PropertyGroup>
+<!--  <PropertyGroup Condition=" '$(IsWindows)' == 'true' ">-->
+<!--    <TargetFrameworks>$(TargetFrameworks);net462</TargetFrameworks>-->
+<!--  </PropertyGroup>-->
 
- <PropertyGroup>
+  <PropertyGroup>
     <PackageTags>MassTransit</PackageTags>
     <Description>$(Description)</Description>
   </PropertyGroup>
@@ -32,7 +32,7 @@
     <PackageReference Include="System.Threading.Tasks.Extensions" />
   </ItemGroup>
 
- <ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
@@ -44,14 +44,14 @@
     <PackageReference Include="System.Threading.Channels" />
   </ItemGroup>
 
-<!--  <ItemGroup>-->
-<!--    <ProjectReference Include="..\MassTransit.Abstractions\MassTransit.Abstractions.csproj" />-->
-<!--  </ItemGroup>-->
+  <!--  <ItemGroup>-->
+  <!--    <ProjectReference Include="..\MassTransit.Abstractions\MassTransit.Abstractions.csproj" />-->
+  <!--  </ItemGroup>-->
 
   <Choose>
     <When Condition=" '$(Configuration)'=='Release' ">
       <ItemGroup>
-        <PackageReference Include="MassTransit.Abstractions" Version="0.18.0" />
+        <PackageReference Include="MassTransit.Abstractions" VersionOverride="$(SympliVersion).$(BUILD_NUMBER)$(PreleaseTag)" />
       </ItemGroup>
     </When>
     <Otherwise>

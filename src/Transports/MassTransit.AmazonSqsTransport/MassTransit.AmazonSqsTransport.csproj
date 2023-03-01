@@ -2,14 +2,14 @@
   <Import Project="../../../signing.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <VersionPrefix>0.18.0</VersionPrefix>
+    <Version>$(SympliVersion)</Version>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(IsWindows)' == 'true' ">
-    <TargetFrameworks>$(TargetFrameworks);net462</TargetFrameworks>
-  </PropertyGroup>
+<!--  <PropertyGroup Condition=" '$(IsWindows)' == 'true' ">-->
+<!--    <TargetFrameworks>$(TargetFrameworks);net462</TargetFrameworks>-->
+<!--  </PropertyGroup>-->
 
   <PropertyGroup>
     <RootNamespace>MassTransit</RootNamespace>
@@ -35,7 +35,7 @@
   <Choose>
     <When Condition=" '$(Configuration)'=='Release' ">
       <ItemGroup>
-        <PackageReference Include="MassTransit" Version="0.18.0" />
+        <PackageReference Include="MassTransit" VersionOverride="$(SympliVersion).$(BUILD_NUMBER)$(PreleaseTag)" />
       </ItemGroup>
     </When>
     <Otherwise>

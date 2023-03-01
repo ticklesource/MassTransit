@@ -11,6 +11,15 @@
     <NoWarn>$(NoWarn)</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <NugetRelease>$(SolutionDir)nuget</NugetRelease>
+    <NugetLocal>$(USERPROFILE)\nuget_local</NugetLocal>
+    <NugetDir>$(NugetLocal)</NugetDir>
+    <BUILD_NUMBER>2</BUILD_NUMBER>
+    <PreleaseTag>-test</PreleaseTag>
+    <SympliVersion>8.0.13</SympliVersion>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <DebugType>embedded</DebugType>

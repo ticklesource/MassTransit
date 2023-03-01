@@ -34,8 +34,8 @@
             _message = message;
             _settings = settings;
 
-            TransportMessage = transportMessage;
-            _body = new StringMessageBody(transportMessage?.Body);
+            _message = message;
+            _body = new StringMessageBody(message?.Body);
 
             _activeTokenSource = new CancellationTokenSource();
             _locked = true;
