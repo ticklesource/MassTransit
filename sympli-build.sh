@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-PROJECTS="./src/MassTransit.Abstractions"
+PROJECTS="./src/MassTransit.Abstractions,./src/MassTransit,./src/Transports/MassTransit.AmazonSqsTransport"
 
 project_list=$(echo $PROJECTS | tr "," "\n")
 
