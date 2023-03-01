@@ -8,7 +8,7 @@ project_list=$(echo $PROJECTS | tr "," "\n")
 root=$PWD
 for p in $project_list
 do
-  dotnet restore -p:TargetFrameworks=netstandard2.1 --no-cache $p
+  dotnet restore $p -p:TargetFrameworks=netstandard2.1 --no-cache
   dotnet build $p -p:BUILD_NUMBER=$BUILD_NUMBER -p:TargetFrameworks=netstandard2.1 --configuration Release
   dotnet pack $p -p:BUILD_NUMBER=$BUILD_NUMBER -p:TargetFrameworks=netstandard2.1 --no-build --configuration Release --output $p/nuget;
 

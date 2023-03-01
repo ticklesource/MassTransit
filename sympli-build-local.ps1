@@ -19,7 +19,7 @@ $projects = "./src/MassTransit.Abstractions,./src/MassTransit,./src/Transports/M
 $project_list = $projects.split(",");
 
 foreach ($p in $project_list) {
-    dotnet restore -p:BUILD_NUMBER=$build_number --no-cache $p
+    dotnet restore -p:TargetFrameworks=netstandard2.1 --no-cache $p
     dotnet build $p -p:TargetFrameworks=netstandard2.1 -p:SympliVersion=$version -p:BUILD_NUMBER=$build_number -p:PreleaseTag=$prelease_tag --configuration Release
     dotnet pack $p -p:TargetFrameworks=netstandard2.1 --no-build -p:SympliVersion=$version -p:BUILD_NUMBER=$build_number -p:PreleaseTag=$prelease_tag --configuration Release --output $nuget_dir
 }
