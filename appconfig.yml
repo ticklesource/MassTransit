@@ -1,0 +1,9 @@
+appName: masstransit
+
+pipeline:
+  kind: container
+  codeBuild:
+    image: standard:6.0
+  repo:
+    name: MassTransit
+  disableDeployStage: true
