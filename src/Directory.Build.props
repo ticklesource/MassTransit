@@ -16,6 +16,7 @@
     <NugetLocal>$(USERPROFILE)\nuget_local</NugetLocal>
     <NugetDir>$(NugetRelease)</NugetDir>
     <PreleaseTag>-sympli</PreleaseTag>
+    <BUILD_NUMBER>1</BUILD_NUMBER>
     <SympliVersion>8.0.13</SympliVersion>
     <Version>$(SympliVersion).$(BUILD_NUMBER)$(PreleaseTag)</Version>
   </PropertyGroup>
