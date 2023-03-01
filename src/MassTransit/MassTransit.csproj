@@ -51,7 +51,7 @@
   <Choose>
     <When Condition=" '$(Configuration)'=='Release' ">
       <ItemGroup>
-        <PackageReference Include="MassTransit.Abstractions" VersionOverride="$(Version).$(BUILD_NUMBER)$(PreleaseTag)" />
+        <PackageReference Include="MassTransit.Abstractions" VersionOverride="$(Version)" />
       </ItemGroup>
     </When>
     <Otherwise>
