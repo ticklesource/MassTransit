@@ -2,14 +2,14 @@
   <Import Project="../../../signing.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net6.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Version>$(SympliVersion)</Version>
   </PropertyGroup>
 
-<!--  <PropertyGroup Condition=" '$(IsWindows)' == 'true' ">-->
-<!--    <TargetFrameworks>$(TargetFrameworks);net462</TargetFrameworks>-->
-<!--  </PropertyGroup>-->
+  <PropertyGroup Condition=" '$(IsWindows)' == 'true' ">
+    <TargetFrameworks>$(TargetFrameworks);net462</TargetFrameworks>
+  </PropertyGroup>
 
   <PropertyGroup>
     <RootNamespace>MassTransit</RootNamespace>

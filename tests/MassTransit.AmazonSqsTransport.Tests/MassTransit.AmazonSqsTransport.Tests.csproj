@@ -4,9 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
-<!--  <PropertyGroup Condition=" '$(IsWindows)' == 'true' ">-->
-<!--    <TargetFrameworks>$(TargetFrameworks);net462</TargetFrameworks>-->
-<!--  </PropertyGroup>-->
+  <PropertyGroup Condition=" '$(IsWindows)' == 'true' ">
+    <TargetFrameworks>$(TargetFrameworks);net462</TargetFrameworks>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
