@@ -21,7 +21,6 @@ $project_list = $projects.split(",");
 foreach ($p in $project_list) {
     dotnet restore --no-cache $p
     dotnet build -p:SympliVersion=$version -p:BUILD_NUMBER=$build_number -p:PreleaseTag=$prelease_tag -p:NugetDir=$nuget_dir $p -f netstandard2.1 --configuration Release
-    $package_id = $p -replace '.*/'
 }
 
 if ($publish) {
