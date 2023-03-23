@@ -6,7 +6,7 @@ $ErrorActionPreference = "Stop"
 
 $sso_profile = 'ticklestaging'
 $aws_region = 'ap-southeast-2'
-$version = '8.0.13'
+$version = '8.0.14'
 $build_number = '7'
 $nuget_dir = [IO.Path]::Combine($env:userprofile, "nuget_local")
 $prelease_tag = '-test'

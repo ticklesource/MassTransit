@@ -5,6 +5,7 @@ namespace MassTransit.Transports
     using System.Threading.Tasks;
     using Configuration;
     using Logging;
+    using Microsoft.Extensions.Logging;
     using Observables;
 
 
@@ -68,6 +69,13 @@ namespace MassTransit.Transports
 
                 if (_observers.Count > 0)
                     await _observers.PostReceive(context).ConfigureAwait(false);
+            }
+            catch (FatalException ex)
+            {
+                LogContext.Define<Uri, string>(LogLevel.Error,
+                    "T-FAULT {InputAddress} {MessageId}")(context.InputAddress,
+                    context.GetMessageId()?.ToString() ?? context.TransportHeaders.Get<string>(MessageHeaders.TransportMessageId),
+                    ex);
             }
             catch (Exception ex)
             {
