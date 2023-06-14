@@ -6,8 +6,8 @@ $ErrorActionPreference = "Stop"
 
 $sso_profile = 'ticklestaging'
 $aws_region = 'ap-southeast-2'
-$version = '8.0.14'
-$build_number = '7'
+$version = '8.0.15'
+$build_number = '8'
 $nuget_dir = [IO.Path]::Combine($env:userprofile, "nuget_local")
 $prelease_tag = '-test'
 
@@ -25,8 +25,7 @@ foreach ($p in $project_list) {
 }
 
 if ($publish) {
-    if (([string]::IsNullOrEmpty($prelease_tag)) -or ($prelease_tag -eq "-sympli"))
-    {
+    if (([string]::IsNullOrEmpty($prelease_tag)) -or ($prelease_tag -eq "-sympli")) {
         Write-Output "Publish is not allowed. Invalid prelease_tag: $prelease_tag"
         Break
     }

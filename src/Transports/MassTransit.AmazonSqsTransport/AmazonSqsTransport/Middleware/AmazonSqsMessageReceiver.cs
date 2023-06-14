@@ -9,6 +9,8 @@ namespace MassTransit.AmazonSqsTransport.Middleware
     using Amazon.SQS.Model;
     using Internals;
     using MassTransit.Middleware;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
     using Transports;
     using Util;
 
@@ -78,6 +80,10 @@ namespace MassTransit.AmazonSqsTransport.Middleware
             {
                 while (!IsStopping)
                 {
+                    if (Environment.GetEnvironmentVariable("MassTransit__LogPolling") == "true")
+                    {
+                        LogContext.Info?.Log("Polling SQS for messages: {QueueUrl}", _receiveSettings.QueueUrl);
+                    }
                     if (_receiveSettings.IsOrdered)
                     {
                         await algorithm.Run(ReceiveMessages, (m, _) => HandleMessage(m), GroupMessages, OrderMessages, Stopping)
@@ -158,9 +164,17 @@ namespace MassTransit.AmazonSqsTransport.Middleware
         {
             try
             {
-                return await _client
+                IList<Message> messages = await _client
                     .ReceiveMessages(_receiveSettings.EntityName, messageLimit, _receiveSettings.WaitTimeSeconds, cancellationToken)
                     .ConfigureAwait(false);
+
+                if (Environment.GetEnvironmentVariable("MassTransit__LogPolling") == "true")
+                {
+                    LogContext.Info?.Log("SQS messages received: {MessageCount}",
+                        messages.Count);
+                }
+
+                return messages;
             }
             catch (OperationCanceledException)
             {
