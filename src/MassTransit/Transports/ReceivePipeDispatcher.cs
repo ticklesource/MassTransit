@@ -72,7 +72,7 @@ namespace MassTransit.Transports
             }
             catch (FatalException ex)
             {
-                LogContext.Define<Uri, string>(LogLevel.Error,
+                LogContext.Define<Uri, string>(LogLevel.Warning,
                     "T-FAULT {InputAddress} {MessageId}")(context.InputAddress,
                     context.GetMessageId()?.ToString() ?? context.TransportHeaders.Get<string>(MessageHeaders.TransportMessageId),
                     ex);
