@@ -270,7 +270,12 @@ namespace MassTransit.Util
                     throw;
             }
 
-            await Task.WhenAll(resultTasks).ConfigureAwait(false);
+            // The line below seems to block messaging polling for FIFO messages
+            // regardless of their groups, meaning is one message is in retry cycle
+            // it'll block the polling for all messages including new messages from
+            // different groups. We comment this line out to get rid of the undesired
+            // behaviour
+            // await Task.WhenAll(resultTasks).ConfigureAwait(false);
         }
 
         async Task<IReadOnlyList<T>> RunRequest<T>(RequestCallback<T> requestCallback, CancellationToken cancellationToken = default)

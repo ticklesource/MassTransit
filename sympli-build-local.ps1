@@ -6,10 +6,10 @@ $ErrorActionPreference = "Stop"
 
 $sso_profile = 'ticklestaging'
 $aws_region = 'ap-southeast-2'
-$version = '8.0.15'
+$version = '8.0.17'
 $build_number = '8'
 $nuget_dir = [IO.Path]::Combine($env:userprofile, "nuget_local")
-$prelease_tag = '-test'
+$prelease_tag = '-qblock'
 
 $nuget_repo = aws ssm get-parameter --name "/DevOps/InternalNugetSource" --region $aws_region --output text --query Parameter.Value --profile $sso_profile
 $nuget_key = aws ssm get-parameter --name "/DevOps/NugetAPIKey" --with-decryption --region $aws_region --output text --query Parameter.Value --profile $sso_profile
