@@ -5,7 +5,6 @@ namespace MassTransit.Tests.Saga
     using MassTransit.Testing;
     using Messages;
     using NUnit.Framework;
-    using Shouldly;
     using TestFramework;
 
 
@@ -22,7 +21,7 @@ namespace MassTransit.Tests.Saga
 
             Guid? sagaId = await _repository.ShouldContainSaga(_sagaId, TestTimeout);
 
-            sagaId.HasValue.ShouldBe(true);
+            Assert.That(sagaId.HasValue, Is.True);
         }
 
         public When_an_initiating_message_for_a_saga_arrives()
@@ -40,17 +39,17 @@ namespace MassTransit.Tests.Saga
         {
             base.ConfigureInMemoryBus(configurator);
 
-            configurator.UseRetry(x => x.None());
+            configurator.UseMessageRetry(x => x.None());
         }
 
         protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)
         {
-            configurator.UseRetry(x => x.Immediate(2));
+            configurator.UseMessageRetry(x => x.Immediate(2));
             configurator.Saga(_repository);
         }
 
         Guid _sagaId;
-        readonly InMemorySagaRepository<SimpleSaga> _repository;
+        readonly ISagaRepository<SimpleSaga> _repository;
     }
 
 
@@ -69,7 +68,7 @@ namespace MassTransit.Tests.Saga
 
             Guid? sagaId = await _repository.ShouldContainSaga(_sagaId, TestTimeout);
 
-            sagaId.HasValue.ShouldBe(true);
+            Assert.That(sagaId.HasValue, Is.True);
 
             await InputQueueSendEndpoint.Send(message);
 
@@ -93,7 +92,7 @@ namespace MassTransit.Tests.Saga
         }
 
         Guid _sagaId;
-        readonly InMemorySagaRepository<SimpleSaga> _repository;
+        readonly ISagaRepository<SimpleSaga> _repository;
     }
 
 
@@ -112,7 +111,7 @@ namespace MassTransit.Tests.Saga
 
             sagaId = await _repository.ShouldContainSaga(x => x.Completed, TestTimeout);
 
-            sagaId.HasValue.ShouldBe(true);
+            Assert.That(sagaId.HasValue, Is.True);
         }
 
         public When_an_initiating_and_orchestrated_message_for_a_saga_arrives()
@@ -132,7 +131,7 @@ namespace MassTransit.Tests.Saga
         }
 
         Guid _sagaId;
-        readonly InMemorySagaRepository<SimpleSaga> _repository;
+        readonly ISagaRepository<SimpleSaga> _repository;
     }
 
 
@@ -151,7 +150,7 @@ namespace MassTransit.Tests.Saga
 
             sagaId = await _repository.ShouldContainSaga(x => x.Observed, TestTimeout);
 
-            sagaId.HasValue.ShouldBe(true);
+            Assert.That(sagaId.HasValue, Is.True);
         }
 
         public When_an_initiating_and_observed_message_for_a_saga_arrives()
@@ -171,7 +170,7 @@ namespace MassTransit.Tests.Saga
         }
 
         Guid _sagaId;
-        readonly InMemorySagaRepository<SimpleSaga> _repository;
+        readonly ISagaRepository<SimpleSaga> _repository;
     }
 
 

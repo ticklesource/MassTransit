@@ -29,19 +29,17 @@
 
             var queue = await sessionContext.GetQueue(_destination).ConfigureAwait(false);
 
-            var producer = await sessionContext.CreateMessageProducer(queue).ConfigureAwait(false);
-
             var message = messageContext.TransportMessage switch
             {
-                IBytesMessage _ => producer.CreateBytesMessage(context.Body.GetBytes()),
-                ITextMessage _ => producer.CreateTextMessage(context.Body.GetString()),
-                _ => producer.CreateMessage(),
+                // ReSharper disable MethodHasAsyncOverload
+                IBytesMessage _ => sessionContext.CreateBytesMessage(context.Body.GetBytes()),
+                ITextMessage _ => sessionContext.CreateTextMessage(context.Body.GetString()),
+                _ => sessionContext.CreateMessage(),
             };
 
             CloneMessage(message, messageContext.TransportMessage, preSend);
 
-            var task = Task.Run(() => producer.Send(message));
-            context.AddReceiveTask(task);
+            await sessionContext.SendAsync(queue, message, context.CancellationToken).ConfigureAwait(false);
         }
 
         static void CloneMessage(IMessage message, IMessage source, Action<IMessage, SendHeaders> preSend)

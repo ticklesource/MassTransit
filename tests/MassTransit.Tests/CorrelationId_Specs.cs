@@ -3,7 +3,6 @@
     using System;
     using System.Threading.Tasks;
     using NUnit.Framework;
-    using Shouldly;
     using TestFramework;
     using TestFramework.Messages;
 
@@ -20,8 +19,8 @@
 
             ConsumeContext<PingMessage> context = await _handled;
 
-            context.CorrelationId.HasValue.ShouldBe(true);
-            context.CorrelationId.Value.ShouldBe(pingMessage.CorrelationId);
+            Assert.That(context.CorrelationId.HasValue, Is.True);
+            Assert.That(context.CorrelationId.Value, Is.EqualTo(pingMessage.CorrelationId));
         }
 
         Task<ConsumeContext<PingMessage>> _handled;
@@ -46,8 +45,8 @@
 
             ConsumeContext<PingMessage> context = await _handled;
 
-            context.CorrelationId.HasValue.ShouldBe(true);
-            context.CorrelationId.Value.ShouldBe(pingMessage.CorrelationId);
+            Assert.That(context.CorrelationId.HasValue, Is.True);
+            Assert.That(context.CorrelationId.Value, Is.EqualTo(pingMessage.CorrelationId));
         }
 
         Task<ConsumeContext<PingMessage>> _handled;
@@ -66,14 +65,14 @@
         [Test]
         public async Task Should_include_a_correlation_id()
         {
-            var message = new A {CorrelationId = NewId.NextGuid()};
+            var message = new A { CorrelationId = NewId.NextGuid() };
 
             await InputQueueSendEndpoint.Send(message);
 
             ConsumeContext<A> context = await _handled;
 
-            context.CorrelationId.HasValue.ShouldBe(true);
-            context.CorrelationId.Value.ShouldBe(message.CorrelationId);
+            Assert.That(context.CorrelationId.HasValue, Is.True);
+            Assert.That(context.CorrelationId.Value, Is.EqualTo(message.CorrelationId));
         }
 
         Task<ConsumeContext<A>> _handled;
@@ -98,14 +97,14 @@
         [Test]
         public async Task Should_include_a_correlation_id()
         {
-            var message = new A {CommandId = NewId.NextGuid()};
+            var message = new A { CommandId = NewId.NextGuid() };
 
             await InputQueueSendEndpoint.Send(message);
 
             ConsumeContext<A> context = await _handled;
 
-            context.CorrelationId.HasValue.ShouldBe(true);
-            context.CorrelationId.Value.ShouldBe(message.CommandId);
+            Assert.That(context.CorrelationId.HasValue, Is.True);
+            Assert.That(context.CorrelationId.Value, Is.EqualTo(message.CommandId));
         }
 
         Task<ConsumeContext<A>> _handled;
@@ -130,14 +129,14 @@
         [Test]
         public async Task Should_include_a_correlation_id()
         {
-            var message = new A {EventId = NewId.NextGuid()};
+            var message = new A { EventId = NewId.NextGuid() };
 
             await InputQueueSendEndpoint.Send(message);
 
             ConsumeContext<A> context = await _handled;
 
-            context.CorrelationId.HasValue.ShouldBe(true);
-            context.CorrelationId.Value.ShouldBe(message.EventId);
+            Assert.That(context.CorrelationId.HasValue, Is.True);
+            Assert.That(context.CorrelationId.Value, Is.EqualTo(message.EventId));
         }
 
         Task<ConsumeContext<A>> _handled;
@@ -163,14 +162,14 @@
         [Test]
         public async Task Should_include_a_correlation_id()
         {
-            var message = new A {CorrelationId = NewId.NextGuid()};
+            var message = new A { CorrelationId = NewId.NextGuid() };
 
             await InputQueueSendEndpoint.Send(message);
 
             ConsumeContext<A> context = await _handled;
 
-            context.CorrelationId.HasValue.ShouldBe(true);
-            context.CorrelationId.Value.ShouldBe(message.CorrelationId.Value);
+            Assert.That(context.CorrelationId.HasValue, Is.True);
+            Assert.That(context.CorrelationId.Value, Is.EqualTo(message.CorrelationId.Value));
         }
 
         Task<ConsumeContext<A>> _handled;
@@ -182,6 +181,45 @@
 
 
         class A
+        {
+            public Guid? CorrelationId { get; set; }
+        }
+    }
+
+
+    [TestFixture]
+    public class Sending_a_nullable_correlation_id_base_class_message :
+        InMemoryTestFixture
+    {
+        [Test]
+        public async Task Should_include_a_correlation_id()
+        {
+            var message = new A { CorrelationId = NewId.NextGuid() };
+
+            await InputQueueSendEndpoint.Send(message);
+
+            ConsumeContext<A> context = await _handled;
+
+            Assert.That(context.CorrelationId.HasValue, Is.True);
+            Assert.That(context.CorrelationId.Value, Is.EqualTo(message.CorrelationId.Value));
+        }
+
+        Task<ConsumeContext<A>> _handled;
+
+        protected override void ConfigureInMemoryReceiveEndpoint(IInMemoryReceiveEndpointConfigurator configurator)
+        {
+            _handled = Handled<A>(configurator);
+        }
+
+
+        public interface IA
+        {
+            Guid? CorrelationId { get; }
+        }
+
+
+        class A :
+            IA
         {
             public Guid? CorrelationId { get; set; }
         }

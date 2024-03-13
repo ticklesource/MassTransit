@@ -47,7 +47,11 @@ namespace MassTransit.ActiveMqTransport.Middleware
 
             var supervisor = CreateConsumerSupervisor(context, actualConsumers);
 
+            await supervisor.Ready.ConfigureAwait(false);
+
             LogContext.Debug?.Log("Consumers Ready: {InputAddress}", _context.InputAddress);
+
+            _context.AddConsumeAgent(supervisor);
 
             await _context.TransportObservers.NotifyReady(_context.InputAddress).ConfigureAwait(false);
 
@@ -72,12 +76,7 @@ namespace MassTransit.ActiveMqTransport.Middleware
 
         Supervisor CreateConsumerSupervisor(SessionContext context, ActiveMqConsumer[] actualConsumers)
         {
-            var supervisor = new Supervisor();
-
-            foreach (var consumer in actualConsumers)
-                supervisor.Add(consumer);
-
-            _context.AddConsumeAgent(supervisor);
+            var supervisor = new ConsumerSupervisor(actualConsumers);
 
             void HandleException(Exception exception)
             {
@@ -104,9 +103,33 @@ namespace MassTransit.ActiveMqTransport.Middleware
 
             var consumer = new ActiveMqConsumer(context, (MessageConsumer)messageConsumer, _context, executor);
 
-            await consumer.Ready.ConfigureAwait(false);
-
             return consumer;
+        }
+
+
+        class ConsumerSupervisor :
+            Supervisor
+        {
+            public ConsumerSupervisor(ActiveMqConsumer[] consumers)
+            {
+                foreach (var consumer in consumers)
+                {
+                    consumer.Completed.ContinueWith(async _ =>
+                    {
+                        try
+                        {
+                            if (!IsStopping)
+                                await this.Stop("Consumer stopped, stopping supervisor").ConfigureAwait(false);
+                        }
+                        catch (Exception exception)
+                        {
+                            LogContext.Warning?.Log(exception, "Stop Faulted");
+                        }
+                    }, TaskContinuationOptions.RunContinuationsAsynchronously);
+
+                    Add(consumer);
+                }
+            }
         }
 
 

@@ -3,7 +3,6 @@ namespace MassTransit.DependencyInjection
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using Clients;
     using Mediator;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -124,8 +123,6 @@ namespace MassTransit.DependencyInjection
 
         static IRequestClient<TRequest> GetRequestClient(IServiceProvider provider)
         {
-            var consumeContext = provider.GetRequiredService<ScopedConsumeContextProvider>().GetContext();
-
             var clientFactory = provider.GetService<IScopedClientFactory>();
             if (clientFactory != null)
                 return clientFactory.CreateRequestClient<TRequest>();
@@ -133,9 +130,8 @@ namespace MassTransit.DependencyInjection
             var mediator = provider.GetService<IScopedMediator>();
             if (mediator != null)
             {
-                return consumeContext != null
-                    ? mediator.CreateRequestClient<TRequest>(consumeContext)
-                    : new ClientFactory(new ScopedClientFactoryContext(mediator, provider)).CreateRequestClient<TRequest>(default);
+                var consumeContext = provider.GetRequiredService<Bind<IMediator, IScopedConsumeContextProvider>>().Value.GetContext();
+                return mediator.CreateRequestClient<TRequest>(consumeContext);
             }
 
             throw new MassTransitException($"Unable to resolve client factory or mediator for request client: {TypeCache<TRequest>.ShortName}");

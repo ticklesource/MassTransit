@@ -11,13 +11,17 @@ namespace MassTransit.Configuration
         IConsumerConfigurationObserver,
         ISagaConfigurationObserver
     {
+        readonly IRegistrationContext _context;
         readonly Type _filterType;
-        readonly IServiceProvider _provider;
+        readonly CompositeFilter<Type> _messageTypeFilter;
 
-        public ScopedConsumePipeSpecificationObserver(Type filterType, IServiceProvider provider)
+        public ScopedConsumePipeSpecificationObserver(Type filterType, IRegistrationContext context, CompositeFilter<Type> messageTypeFilter)
         {
             _filterType = filterType;
-            _provider = provider;
+            _context = context;
+            _messageTypeFilter = messageTypeFilter;
+            // do not create filters for scheduled/outbox messages
+            _messageTypeFilter.Excludes += type => type == typeof(SerializedMessageBody);
         }
 
         public void ConsumerConfigured<TConsumer>(IConsumerConfigurator<TConsumer> configurator)
@@ -58,19 +62,17 @@ namespace MassTransit.Configuration
         void AddScopedFilter<TMessage>(IPipeConfigurator<ConsumeContext<TMessage>> messageConfigurator)
             where TMessage : class
         {
-            if (!_filterType.IsGenericType || !_filterType.IsGenericTypeDefinition)
-                throw new ConfigurationException("The scoped filter must be a generic type definition");
-
-            // do not create filters for scheduled/outbox messages
-            if (typeof(TMessage) == typeof(SerializedMessageBody))
+            if (!_messageTypeFilter.Matches(typeof(TMessage)))
                 return;
 
-            var filterType = _filterType.MakeGenericType(typeof(TMessage));
+            var filterType = _filterType.HasInterface<IFilter<ConsumeContext<TMessage>>>()
+                ? _filterType
+                : _filterType.MakeGenericType(typeof(TMessage));
 
             if (!filterType.HasInterface(typeof(IFilter<ConsumeContext<TMessage>>)))
                 throw new ConfigurationException($"The scoped filter must implement {TypeCache<IFilter<ConsumeContext<TMessage>>>.ShortName} ");
 
-            var scopeProvider = new ConsumeScopeProvider(_provider);
+            var scopeProvider = new ConsumeScopeProvider(_context);
 
             var scopedFilterType = typeof(ScopedConsumeFilter<,>).MakeGenericType(typeof(TMessage), filterType);
 

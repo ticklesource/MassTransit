@@ -7,6 +7,7 @@ namespace MassTransit
     using System.IO;
     using System.Linq;
     using Configuration;
+    using DependencyInjection;
     using DependencyInjection.Registration;
     using DependencyInjection.Testing;
     using Internals;
@@ -60,6 +61,8 @@ namespace MassTransit
             {
                 options.WaitUntilStarted = true;
             });
+
+            services.TryAddSingleton<IValidateOptions<MassTransitHostOptions>, ValidateMassTransitHostOptions>();
 
             // If the bus was already configured, well, let's use it and any existing registrations
             if (services.Any(d => d.ServiceType == typeof(IBus)))
@@ -196,6 +199,7 @@ namespace MassTransit
         /// <summary>
         /// Add the In-Memory test harness to the container, and configure it using the callback specified.
         /// </summary>
+        [Obsolete("Use AddMassTransitTestHarness instead. Visit https://masstransit.io/obsolete for details.")]
         public static IServiceCollection AddMassTransitInMemoryTestHarness(this IServiceCollection services,
             Action<IBusRegistrationConfigurator>? configure = null)
         {
@@ -302,7 +306,7 @@ namespace MassTransit
         /// <summary>
         /// Add a consumer test harness for the specified consumer to the container
         /// </summary>
-        [Obsolete("Consider migrating to AddMassTransitTestHarness, which does not require this extra configuration")]
+        [Obsolete("Use AddMassTransitTestHarness instead. Visit https://masstransit.io/obsolete for details.")]
         public static void AddConsumerTestHarness<T>(this IBusRegistrationConfigurator configurator)
             where T : class, IConsumer
         {
@@ -315,7 +319,7 @@ namespace MassTransit
         /// Add a saga test harness for the specified saga to the container. The saga must be added separately, including
         /// a valid saga repository.
         /// </summary>
-        [Obsolete("Consider migrating to AddMassTransitTestHarness, which does not require this extra configuration")]
+        [Obsolete("Use AddMassTransitTestHarness instead. Visit https://masstransit.io/obsolete for details.")]
         public static void AddSagaTestHarness<T>(this IBusRegistrationConfigurator configurator)
             where T : class, ISaga
         {
@@ -328,7 +332,7 @@ namespace MassTransit
         /// Add a saga test harness for the specified saga to the container. The saga must be added separately, including
         /// a valid saga repository.
         /// </summary>
-        [Obsolete("Consider migrating to AddMassTransitTestHarness, which does not require this extra configuration")]
+        [Obsolete("Use AddMassTransitTestHarness instead. Visit https://masstransit.io/obsolete for details.")]
         public static void AddSagaStateMachineTestHarness<TStateMachine, TSaga>(this IBusRegistrationConfigurator configurator)
             where TSaga : class, SagaStateMachineInstance
             where TStateMachine : SagaStateMachine<TSaga>

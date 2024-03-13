@@ -1,6 +1,7 @@
 namespace MassTransit
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading;
 
 
@@ -35,7 +36,7 @@ namespace MassTransit
         /// Returns an existing payload or creates the payload using the factory method provided
         /// </summary>
         /// <typeparam name="T">The payload type</typeparam>
-        /// <param name="payloadFactory">The payload factory is the payload is not present</param>
+        /// <param name="payloadFactory">The payload factory to use if the payload is not already present</param>
         /// <returns>The payload</returns>
         T GetOrAddPayload<T>(PayloadFactory<T> payloadFactory)
             where T : class;
