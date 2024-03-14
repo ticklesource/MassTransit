@@ -3,7 +3,7 @@ appName: masstransit
 pipeline:
   kind: container
   codeBuild:
-    image: standard:6.0
+    image: standard:7.0
   repo:
     name: MassTransit
   disableDeployStage: true
