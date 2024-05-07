@@ -27,6 +27,19 @@ namespace MassTransit.Transports
             return Execute(context => context.ValidateLockStatus());
         }
 
+        public void StopRenew()
+        {
+            if (_lockContext is SympliReceiveLockContext sympliReceiveLockContext)
+            {
+                sympliReceiveLockContext.StopRenew();
+            }
+            else
+            {
+                throw new InvalidOperationException("The lock context does not support renewing the lock; "
+                    + "only SympliReceiveLockContext supports renewing the lock.");
+            }
+        }
+
         public void Dispose()
         {
             lock (this)

@@ -8,12 +8,18 @@ namespace MassTransit.Transports
     using Middleware;
     using Util;
 
+    public interface RenewCancellable
+    {
+        void StopRenew();
+    }
+
 
     public abstract class BaseReceiveContext :
         ScopePipeContext,
         ReceiveContext,
         ReceiveLockContext,
-        IDisposable
+        IDisposable,
+        RenewCancellable
     {
         readonly CancellationTokenSource _cancellationTokenSource;
         readonly Lazy<ContentType> _contentType;
@@ -132,6 +138,11 @@ namespace MassTransit.Transports
         Task ReceiveLockContext.ValidateLockStatus()
         {
             return _pendingLockContexts.ValidateLockStatus();
+        }
+
+        public void StopRenew()
+        {
+            _pendingLockContexts.StopRenew();
         }
 
         protected virtual ISendEndpointProvider GetSendEndpointProvider()

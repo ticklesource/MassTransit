@@ -78,8 +78,14 @@ namespace MassTransit.Transports
             {
                 LogContext.Define<Uri, string>(LogLevel.Warning,
                     "T-FAULT {InputAddress} {MessageId}")(context.InputAddress,
-                    context.GetMessageId()?.ToString() ?? context.TransportHeaders.Get<string>(MessageHeaders.TransportMessageId),
+                    context.GetMessageId()?.ToString() ??
+                    context.TransportHeaders.Get<string>(MessageHeaders.TransportMessageId),
                     ex);
+                // tell receiveLock to stop renew visibility timeout
+                if (receiveLock is RenewCancellable renewCancellable)
+                {
+                    renewCancellable.StopRenew();
+                }
             }
             catch (Exception ex)
             {
@@ -208,7 +214,7 @@ namespace MassTransit.Transports
         }
 
 
-        class Metrics :
+        private class Metrics :
             DeliveryMetrics
         {
             public Metrics(long deliveryCount, int concurrentDeliveryCount)

@@ -10,7 +10,7 @@ namespace MassTransit.AmazonSqsTransport
 
 
     public class AmazonSqsReceiveLockContext :
-        ReceiveLockContext
+        SympliReceiveLockContext
     {
         static readonly TimeSpan MaxVisibilityTimeout = TimeSpan.FromHours(12);
         readonly CancellationTokenSource _activeTokenSource;
@@ -88,6 +88,12 @@ namespace MassTransit.AmazonSqsTransport
                 return Task.CompletedTask;
 
             throw new TransportException(_inputAddress, $"Message Lock Lost: {_message.ReceiptHandle}");
+        }
+
+        public void StopRenew()
+        {
+            _activeTokenSource.Cancel();
+            _activeTokenSource.Dispose();
         }
 
         async Task RenewMessageVisibility()

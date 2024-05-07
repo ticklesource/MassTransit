@@ -28,4 +28,10 @@ namespace MassTransit.Transports
         /// <returns></returns>
         Task ValidateLockStatus();
     }
+
+
+    public interface SympliReceiveLockContext : ReceiveLockContext
+    {
+        void StopRenew();
+    }
 }
