@@ -57,7 +57,7 @@ namespace MassTransit.EntityFrameworkCoreIntegration
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(exception, "CleanUpInboxState faulted");
+                    _logger.LogWarning(exception, "CleanUpInboxState faulted");
                 }
             }
         }

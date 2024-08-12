@@ -149,7 +149,7 @@ namespace MassTransit.AmazonSqsTransport
                 }
                 catch (AmazonSQSException exception)
                 {
-                    LogContext.Error?.Log(exception, "Failed to extend message {ReceiptHandle} visibility to {VisibilityTimeout} ({ElapsedTime})",
+                    LogContext.Warning?.Log(exception, "Failed to extend message {ReceiptHandle} visibility to {VisibilityTimeout} ({ElapsedTime})",
                         _message.ReceiptHandle, TimeSpan.FromSeconds(visibilityTimeout).ToFriendlyString(), DateTime.UtcNow - _startedAt);
 
                     break;

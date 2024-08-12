@@ -17,7 +17,7 @@
     <NugetDir>$(NugetRelease)</NugetDir>
     <PreleaseTag>-sympli</PreleaseTag>
     <BUILD_NUMBER>1</BUILD_NUMBER>
-    <SympliVersion>8.2.1</SympliVersion>
+    <SympliVersion>8.2.2</SympliVersion>
     <Version>$(SympliVersion).$(BUILD_NUMBER)$(PreleaseTag)</Version>
   </PropertyGroup>
 
